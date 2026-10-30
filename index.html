@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Едоварня — доставка блюд русской кухни.">
+    <title>Едоварня — Доставка русской кухни</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Едоварня</div>
+        <nav>
+            <a href="#menu">Меню</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#contacts">Контакты</a>
+            <button class="auth-btn" id="openAuthBtn" type="button">Войти / Регистрация</button>
+            <span class="user-greeting" id="userGreeting" hidden></span>
+            <button class="cart-btn" id="openCartBtn" type="button">
+                🛒 Корзина <span class="cart-count" id="headerCartCount">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="about">
+            <div class="hero-overlay"></div>
+            <div class="hero-content" data-aos="fade-up">
+                <h1>Едоварня</h1>
+                <p>Аутентичная русская кухня с доставкой на дом. Наваристые щи, румяные пирожки и сочные пельмени — привезём горячими!</p>
+                <button class="btn-primary" id="scrollToMenuBtn" type="button">Посмотреть меню</button>
+            </div>
+        </section>
+
+        <section class="features" data-aos="fade-up">
+            <div class="feature-item"><span class="feature-icon">🥟</span><h3>Ручная лепка</h3><p>Пельмени и вареники лепим сами по традиционным рецептам.</p></div>
+            <div class="feature-item"><span class="feature-icon">🔥</span><h3>Русская печь</h3><p>Готовим в настоящей печи — отсюда тот самый вкус детства.</p></div>
+            <div class="feature-item"><span class="feature-icon">🛵</span><h3>Быстрая доставка</h3><p>Привезём ваш заказ горячим в течение 45–60 минут.</p></div>
+        </section>
+
+        <section class="menu-section" id="menu">
+            <h2 class="section-title" data-aos="fade-up">Наше меню</h2>
+            <div class="menu-tools" data-aos="fade-up">
+                <label class="search-box" for="menuSearch">
+                    <span aria-hidden="true">⌕</span>
+                    <input id="menuSearch" type="search" placeholder="Найти блюдо..." autocomplete="off">
+                    <button id="clearSearchBtn" type="button" aria-label="Очистить поиск">×</button>
+                </label>
+                <select id="sortMenu" aria-label="Сортировка меню">
+                    <option value="default">Сначала популярное</option>
+                    <option value="price-asc">Сначала дешевле</option>
+                    <option value="price-desc">Сначала дороже</option>
+                    <option value="name">По названию</option>
+                </select>
+            </div>
+            <div class="filters" id="filtersContainer" data-aos="fade-up"></div>
+            <div class="grid" id="menuGrid"><p style="text-align:center;width:100%">Загрузка меню...</p></div>
+        </section>
+
+        <section class="reviews-section" id="reviews">
+            <h2 class="section-title" data-aos="fade-up">Что о нас говорят</h2>
+            <p class="section-subtitle">Ваши впечатления помогают нам становиться лучше</p>
+            <div class="reviews-grid" id="reviewsGrid"><p style="text-align:center;width:100%">Загрузка отзывов...</p></div>
+            <div class="review-form-wrap" data-aos="fade-up">
+                <h3>Оставить отзыв</h3>
+                <p class="form-note" id="reviewAuthNote">Войдите или зарегистрируйтесь, чтобы оставить отзыв.</p>
+                <form id="reviewForm" class="review-form">
+                    <label>Оценка
+                        <select name="rating" required>
+                            <option value="5">★★★★★ — Отлично</option>
+                            <option value="4">★★★★☆ — Хорошо</option>
+                            <option value="3">★★★☆☆ — Нормально</option>
+                            <option value="2">★★☆☆☆ — Плохо</option>
+                            <option value="1">★☆☆☆☆ — Очень плохо</option>
+                        </select>
+                    </label>
+                    <label>Ваш отзыв
+                        <textarea name="text" required minlength="5" maxlength="1000" placeholder="Расскажите, что вам понравилось..." rows="4"></textarea>
+                    </label>
+                    <div id="reviewError" class="error-message" role="alert" hidden></div>
+                    <button class="btn-primary" type="submit" id="submitReviewBtn">Опубликовать отзыв</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="contacts-section" id="contacts">
+            <div class="contacts-container" data-aos="fade-up">
+                <h2>Приходите в гости</h2>
+                <p class="address">г. Москва, ул. Пятницкая, д. 15</p>
+                <p class="phone"><a href="tel:+79831356698">+7 (983) 135-66-98</a></p>
+                <p class="work-hours">Ежедневно с 11:00 до 23:00</p>
+            </div>
+        </section>
+    </main>
+
+
+    <div class="modal-overlay" id="authModal" aria-hidden="true">
+        <div class="modal auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+            <div class="modal-header">
+                <h2 id="authTitle">Личный кабинет</h2>
+                <button class="close-btn" id="closeAuthBtn" type="button" aria-label="Закрыть">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs" id="authTabs" role="tablist" aria-label="Авторизация">
+                    <button type="button" class="auth-tab active" data-auth-mode="login">Вход</button>
+                    <button type="button" class="auth-tab" data-auth-mode="register">Регистрация</button>
+                </div>
+                <form id="authForm" class="auth-form">
+                    <label id="authNameWrap" hidden>Имя
+                        <input name="firstName" autocomplete="given-name" maxlength="80" placeholder="Иван">
+                    </label>
+                    <label>Email
+                        <input name="email" type="email" autocomplete="email" required maxlength="150" placeholder="you@example.com">
+                    </label>
+                    <label>Пароль
+                        <input name="password" type="password" autocomplete="current-password" required minlength="6" maxlength="100" placeholder="Минимум 6 символов">
+                    </label>
+                    <label id="authPhoneWrap" hidden>Телефон
+                        <input name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder="+7 900 000-00-00">
+                    </label>
+                    <div id="authError" class="error-message" role="alert" hidden></div>
+                    <button class="btn-primary auth-submit" type="submit" id="authSubmitBtn">Войти</button>
+                    <button class="text-button" type="button" id="forgotPasswordBtn">Забыли пароль?</button>
+                </form>
+                <div class="account-actions" id="accountActions" hidden>
+                    <p id="accountEmail"></p>
+                    <button class="btn-secondary" id="signOutBtn" type="button">Выйти из аккаунта</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="cartModal" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+            <div class="modal-header"><h2 id="cartTitle">🛒 Корзина</h2><button class="close-btn" id="closeCartBtn" type="button" aria-label="Закрыть">×</button></div>
+            <div class="modal-body" id="cartItemsContainer"><div class="empty-cart">Ваша корзина пуста 😔</div></div>
+            <div class="modal-footer" id="cartFooter" style="display:none">
+                <div id="cartSummary" class="cart-summary-details"></div>
+                <button class="btn-primary checkout-btn" id="checkoutBtn" type="button">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay checkout-modal" id="checkoutModal" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+            <div class="modal-header"><h2 id="checkoutTitle">Оформление заказа</h2><button class="close-btn" id="closeCheckoutBtn" type="button" aria-label="Закрыть">×</button></div>
+            <div class="modal-body">
+                <form class="checkout-form" id="checkoutForm">
+                    <label>Имя
+                        <input name="firstName" autocomplete="given-name" required maxlength="80" placeholder="Иван">
+                    </label>
+                    <label>Телефон
+                        <input name="phone" type="tel" autocomplete="tel" required maxlength="30" placeholder="+7 900 000-00-00">
+                    </label>
+                    <label>Город
+                        <input name="city" required maxlength="100" value="Москва">
+                    </label>
+                    <label>Улица
+                        <input name="street" required maxlength="150" placeholder="ул. Пятницкая">
+                    </label>
+                    <label>Дом / корпус
+                        <input name="building" required maxlength="40" placeholder="15">
+                    </label>
+                    <label>Квартира (необязательно)
+                        <input name="apartment" maxlength="40" placeholder="42">
+                    </label>
+                    <label>Подъезд (необязательно)
+                        <input name="entrance" maxlength="20" placeholder="2">
+                    </label>
+                    <label>Этаж (необязательно)
+                        <input name="floor" maxlength="20" placeholder="3">
+                    </label>
+                    <label>Комментарий курьеру (необязательно)
+                        <textarea name="comment" maxlength="500" placeholder="Код домофона, ориентиры и т. п."></textarea>
+                    </label>
+                    <label>Оплата
+                        <select name="paymentMethod" required>
+                            <option value="cash">Наличными курьеру</option>
+                            <option value="card_on_delivery">Картой курьеру</option>
+                        </select>
+                    </label>
+                    <p class="checkout-hint">Это учебный вариант: онлайн-оплата не подключена. Оплата производится при получении.</p>
+                    <div id="checkoutError" class="error-message" role="alert" hidden></div>
+                    <div class="checkout-actions">
+                        <button class="btn-secondary" id="cancelCheckoutBtn" type="button">Назад</button>
+                        <button class="btn-primary" id="submitOrderBtn" type="submit">Подтвердить заказ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">Товар добавлен в корзину</div>
+
+    <footer>
+        <div><h3>Едоварня</h3><p>Сервис доставки русской кухни. Готовим с душой по старинным рецептам.</p></div>
+        <div><h3>Контакты</h3><p>г. Москва, ул. Пятницкая, д. 15<br><a href="tel:+79831356698" class="footer-phone">+7 (983) 135-66-98</a></p></div>
+        <div><h3>Режим работы</h3><p>Ежедневно с 11:00 до 23:00</p></div>
+    </footer>
+
+    <!-- Compat SDK соответствует стилю кода ниже (firebase.firestore()). -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/db-service.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
